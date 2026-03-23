@@ -3,11 +3,22 @@ import java.util.*;
 public class TokenizerTest {
     public static void main(String[] args) {
 
-        String input = "set x = 5";
+        List<String> testCases = List.of(
+                "set x = 5",
+                "show \"Hello\"",
+                "set score = 85\nwhen score > 50:\nshow \"Pass\"",
+                "set i = 1\nloop 4:\nshow i\nset i = i + 1"
+        );
 
-        Tokenizer tokenizer = new Tokenizer(input); 
-        List<Token> tokens = tokenizer.tokenize();   
+        testCases.forEach(input -> {
+            System.out.println("INPUT:\n" + input);
 
-        tokens.forEach(System.out::println);
+            Tokenizer tokenizer = new Tokenizer(input);
+            List<Token> tokens = tokenizer.tokenize();
+
+            tokens.forEach(System.out::println);
+
+            System.out.println("----------------------");
+        });
     }
 }
