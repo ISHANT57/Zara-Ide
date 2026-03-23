@@ -110,4 +110,40 @@ public class Tokenizer {
                 return new Token(TokenType.IDENTIFIER, word, line);
         }
     }
+
+    private Token readSymbol() {
+        char c = source.charAt(pos);
+        switch (c) {
+            case '+': 
+                pos++; 
+                return new Token(TokenType.PLUS, "+", line);
+            case '-': 
+                pos++; 
+                return new Token(TokenType.MINUS, "-", line);
+            case '*': 
+                pos++; 
+                return new Token(TokenType.MULTIPLY, "*",line);
+            case '/': 
+                pos++; 
+                return new Token(TokenType.DIVIDE, "/", line);
+            case ':': 
+                pos++; 
+                return new Token(TokenType.COLON, ":", line);
+            case '>': 
+                pos++; 
+                return new Token(TokenType.GT, ">", line);
+            case '<': 
+                pos++; 
+                return new Token(TokenType.LT, "<", line);
+            case '=':
+                if (pos+1 < source.length() && source.charAt(pos+1)=='=') {
+                    pos += 2; return new Token(TokenType.EQEQ, "==", line);
+                }
+                pos++; 
+                return new Token(TokenType.EQUALS, "=", line);
+            default: 
+                pos++; 
+                return new Token(TokenType.IDENTIFIER, ""+c, line);
+        }
+    }
 }
