@@ -35,15 +35,21 @@ public class Tokenizer {
             }
 
             if (current == '=') {
-                tokens.add(new Token(TokenType.EQUALS, "=", line));
-                pos++;
+                if (pos + 1 < source.length() && source.charAt(pos + 1) == '=') {
+                    tokens.add(new Token(TokenType.EQEQ, "==", line));
+                    pos += 2;
+                } else {
+                    tokens.add(new Token(TokenType.EQUALS, "=", line));
+                    pos++;
+                }
                 continue;
             }
 
             if (Character.isLetter(current)) {
-                tokens.add(readIdentifier());
+                tokens.add(readIdentifierOrKeyword());
                 continue;
             }
+
             pos++;
         }
 
@@ -80,21 +86,28 @@ public class Tokenizer {
         return new Token(TokenType.STRING, text, line);
     }
 
-    private Token readIdentifier() {
+    private Token readIdentifierOrKeyword() {
         int start = pos;
+
         while (pos < source.length() &&
-                Character.isLetterOrDigit(source.charAt(pos))) {
+                (Character.isLetterOrDigit(source.charAt(pos)) ||
+                 source.charAt(pos) == '_')) {
             pos++;
         }
 
-        String text = source.substring(start, pos);
+        String word = source.substring(start, pos);
 
-        if (text.equals("set")) {
-            return new Token(TokenType.SET, text, line);
+        switch (word) {
+            case "set":
+                return new Token(TokenType.SET, word, line);
+            case "show":
+                return new Token(TokenType.SHOW, word, line);
+            case "when":
+                return new Token(TokenType.WHEN, word, line);
+            case "loop":
+                return new Token(TokenType.LOOP, word, line);
+            default:
+                return new Token(TokenType.IDENTIFIER, word, line);
         }
-        if (text.equals("show")) {
-            return new Token(TokenType.SHOW, text, line);
-        }
-        return new Token(TokenType.IDENTIFIER, text, line);
     }
 }
