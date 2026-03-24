@@ -34,23 +34,12 @@ public class Tokenizer {
                 continue;
             }
 
-            if (current == '=') {
-                if (pos + 1 < source.length() && source.charAt(pos + 1) == '=') {
-                    tokens.add(new Token(TokenType.EQEQ, "==", line));
-                    pos += 2;
-                } else {
-                    tokens.add(new Token(TokenType.EQUALS, "=", line));
-                    pos++;
-                }
-                continue;
-            }
-
             if (Character.isLetter(current)) {
                 tokens.add(readIdentifierOrKeyword());
                 continue;
             }
 
-            pos++;
+            tokens.add(readSymbol());
         }
 
         tokens.add(new Token(TokenType.EOF, "", line));
@@ -137,7 +126,8 @@ public class Tokenizer {
                 return new Token(TokenType.LT, "<", line);
             case '=':
                 if (pos+1 < source.length() && source.charAt(pos+1)=='=') {
-                    pos += 2; return new Token(TokenType.EQEQ, "==", line);
+                    pos += 2; 
+                    return new Token(TokenType.EQEQ, "==", line);
                 }
                 pos++; 
                 return new Token(TokenType.EQUALS, "=", line);
