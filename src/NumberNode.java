@@ -6,8 +6,6 @@ public final class NumberNode implements Expression {
 
     @Override
     public Object evaluate(Environment env) {
-       return value;
+        return value;
     }
-
-    
 }
