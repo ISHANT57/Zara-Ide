@@ -18,7 +18,7 @@ public class TokenizerTest {
 
             tokens.forEach(System.out::println);
 
-            System.out.println("----------------------");
+           System.out.println("----------------");
         });
     }
 }
