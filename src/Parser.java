@@ -61,32 +61,21 @@ public class Parser {
     private Instruction parseIf() {
         consume(TokenType.WHEN);
         Expression condition = parseExpression();
-        consume(TokenType.LBRACE);
-
-        List<Instruction> body = new ArrayList<>();
-        while (current().getType() != TokenType.RBRACE &&
-               current().getType() != TokenType.EOF) {
-            body.add(parseInstruction());
-        }
-
-        consume(TokenType.RBRACE);
-
-        // 🔥 FIX HERE
-       return new IfInstruction(condition, body.get(0), null);
+        consume(TokenType.COLON);
+        Instruction body = parseInstruction();
+        return new IfInstruction(condition, body, null);
     }
 
     private Instruction parseLoop() {
         consume(TokenType.LOOP);
         int times = (int) Double.parseDouble(consume(TokenType.NUMBER).getValue());
-        consume(TokenType.LBRACE);
+        consume(TokenType.COLON);
 
         List<Instruction> body = new ArrayList<>();
-        while (current().getType() != TokenType.RBRACE &&
-               current().getType() != TokenType.EOF) {
+        while (current().getType() != TokenType.EOF) {
             body.add(parseInstruction());
         }
 
-        consume(TokenType.RBRACE);
         return new RepeatInstruction(times, body);
     }
 
