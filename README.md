@@ -5,8 +5,8 @@
 **A Mini Programming Language — Built in Pure Java**
 
 [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.java.com/)
-[![University Project](https://img.shields.io/badge/Sitare%20University-Advanced%20OOP-blue?style=for-the-badge)](https://www.sitare.edu)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![University Project](https://img.shields.io/badge/Sitare%20University-Advanced%20OOP-blue?style=for-the-badge)](https://univ.sitare.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://mit-license.org/)
 
 *Create. Interpret. Execute. — Your journey into language design starts here.*
 
@@ -278,7 +278,7 @@ This project is part of the **Advanced OOP in Java** course at **Sitare Universi
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://mit-license.org/) file for details.
 
 ---
 
