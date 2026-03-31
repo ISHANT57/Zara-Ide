@@ -7,7 +7,7 @@ public class Parser {
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
-        this.pos    = 0;
+        this.pos = 0;
     }
 
     private Token current() {
@@ -16,10 +16,10 @@ public class Parser {
 
     private Token consume(TokenType expected) {
         Token t = current();
-        if (t.type != expected) {
+        if (t.getType() != expected) {
             throw new RuntimeException(
                 "Syntax Error: Expected " + expected +
-                " but got '" + t.value + "' (" + t.type + ")"
+                " but got '" + t.getValue() + "' (" + t.getType() + ")"
             );
         }
         pos++;
@@ -28,7 +28,7 @@ public class Parser {
 
     public List<Instruction> parse() {
         List<Instruction> instructions = new ArrayList<>();
-        while (current().type != TokenType.EOF) {
+        while (current().getType() != TokenType.EOF) {
             instructions.add(parseInstruction());
         }
         return instructions;
@@ -36,16 +36,16 @@ public class Parser {
 
     private Instruction parseInstruction() {
         Token t = current();
-        if (t.type == TokenType.SET)  return parseAssign();
-        if (t.type == TokenType.SHOW) return parsePrint();
-        if (t.type == TokenType.WHEN) return parseIf();
-        if (t.type == TokenType.LOOP) return parseLoop();
-        throw new RuntimeException("Unknown instruction: '" + t.value + "'");
+        if (t.getType() == TokenType.SET)  return parseAssign();
+        if (t.getType() == TokenType.SHOW) return parsePrint();
+        if (t.getType() == TokenType.WHEN) return parseIf();
+        if (t.getType() == TokenType.LOOP) return parseLoop();
+        throw new RuntimeException("Unknown instruction: '" + t.getValue() + "'");
     }
 
     private Instruction parseAssign() {
         consume(TokenType.SET);
-        String name = consume(TokenType.IDENTIFIER).value;
+        String name = consume(TokenType.IDENTIFIER).getValue();
         consume(TokenType.EQUALS);
         Expression expr = parseExpression();
         return new AssignInstruction(name, expr);
@@ -57,80 +57,97 @@ public class Parser {
         return new PrintInstruction(expr);
     }
 
+    // ✅ FIXED IF
     private Instruction parseIf() {
         consume(TokenType.WHEN);
         Expression condition = parseExpression();
         consume(TokenType.LBRACE);
+
         List<Instruction> body = new ArrayList<>();
-        while (current().type != TokenType.RBRACE && current().type != TokenType.EOF) {
+        while (current().getType() != TokenType.RBRACE &&
+               current().getType() != TokenType.EOF) {
             body.add(parseInstruction());
         }
+
         consume(TokenType.RBRACE);
-        return new IfInstruction(condition, body);
+
+        // 🔥 FIX HERE
+       return new IfInstruction(condition, body.get(0), null);
     }
 
     private Instruction parseLoop() {
         consume(TokenType.LOOP);
-        int times = (int) Double.parseDouble(consume(TokenType.NUMBER).value);
+        int times = (int) Double.parseDouble(consume(TokenType.NUMBER).getValue());
         consume(TokenType.LBRACE);
+
         List<Instruction> body = new ArrayList<>();
-        while (current().type != TokenType.RBRACE && current().type != TokenType.EOF) {
+        while (current().getType() != TokenType.RBRACE &&
+               current().getType() != TokenType.EOF) {
             body.add(parseInstruction());
         }
+
         consume(TokenType.RBRACE);
         return new RepeatInstruction(times, body);
     }
 
-    // Handles: + - > < ==
     private Expression parseExpression() {
         Expression left = parseTerm();
-        while (current().type == TokenType.PLUS  ||
-               current().type == TokenType.MINUS  ||
-               current().type == TokenType.GT     ||
-               current().type == TokenType.LT     ||
-               current().type == TokenType.EQEQ) {
-            String op = current().value;
+
+        while (current().getType() == TokenType.PLUS ||
+               current().getType() == TokenType.MINUS ||
+               current().getType() == TokenType.GT ||
+               current().getType() == TokenType.LT ||
+               current().getType() == TokenType.EQEQ) {
+
+            String op = current().getValue();
             pos++;
             Expression right = parseTerm();
             left = new BinaryOpNode(left, op, right);
         }
+
         return left;
     }
 
-    // Handles: * /
     private Expression parseTerm() {
         Expression left = parsePrimary();
-        while (current().type == TokenType.MULTIPLY ||
-               current().type == TokenType.DIVIDE) {
-            String op = current().value;
+
+        while (current().getType() == TokenType.MULTIPLY ||
+               current().getType() == TokenType.DIVIDE) {
+
+            String op = current().getValue();
             pos++;
             Expression right = parsePrimary();
             left = new BinaryOpNode(left, op, right);
         }
+
         return left;
     }
 
-    // Simplest unit: number, string, variable
     private Expression parsePrimary() {
         Token t = current();
-        if (t.type == TokenType.NUMBER) {
+
+        if (t.getType() == TokenType.NUMBER) {
             pos++;
-            return new NumberNode(Double.parseDouble(t.value));
+            return new NumberNode(Double.parseDouble(t.getValue()));
         }
-        if (t.type == TokenType.STRING) {
+
+        if (t.getType() == TokenType.STRING) {
             pos++;
-            return new StringNode(t.value);
+            return new StringNode(t.getValue());
         }
-        if (t.type == TokenType.IDENTIFIER) {
+
+        if (t.getType() == TokenType.IDENTIFIER) {
             pos++;
-            return new VariableNode(t.value);
+            return new VariableNode(t.getValue());
         }
-        if (t.type == TokenType.LPAREN) {
+
+        if (t.getType() == TokenType.LPAREN) {
             pos++;
             Expression expr = parseExpression();
             consume(TokenType.RPAREN);
             return expr;
         }
-        throw new RuntimeException("Unexpected token: '" + t.value + "'");
+
+        throw new RuntimeException("Unexpected token: '" + t.getValue() + "'");
     }
 }
