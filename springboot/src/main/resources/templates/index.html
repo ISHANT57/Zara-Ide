@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZARA Language Interpreter - Professional IDE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #007acc;
+            --primary-hover: #0090d4;
+            --danger: #d13438;
+            --success: #107c10;
+            --bg-dark: #1e1e1e;
+            --bg-secondary: #252526;
+            --bg-tertiary: #2d2d30;
+            --border: #3e3e42;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --text-accent: #4fc3f7;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Monaco', 'Courier New', monospace;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .header-logo {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--text-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-stats {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 20px;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        .btn:hover {
+            background: var(--border);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.3);
+        }
+
+        .btn-success {
+            background: rgba(16, 124, 16, 0.3);
+            color: #7ccd4a;
+        }
+
+        .btn-success:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: rgba(209, 52, 56, 0.3);
+            color: #ff6b6b;
+            border-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 6px;
+        }
+
+        /* MAIN LAYOUT */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            overflow: hidden;
+            background: var(--bg-dark);
+        }
+
+        /* EDITOR PANEL */
+        .editor-panel {
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .output-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--bg-secondary);
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .editor-wrapper {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .line-numbers {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 12px 8px;
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre;
+            overflow: hidden;
+            border-right: 1px solid var(--border);
+            user-select: none;
+            min-width: 45px;
+        }
+
+        .editor-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #codeEditor {
+            width: 100%;
+            height: 100%;
+            padding: 12px 16px;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            border: none;
+            font-size: 13px;
+            line-height: 1.5;
+            font-family: 'Monaco', 'Courier New', monospace;
+            resize: none;
+            outline: none;
+            overflow: auto;
+        }
+
+        #codeEditor::selection {
+            background: rgba(0, 122, 204, 0.3);
+        }
+
+        /* TABS */
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(0, 122, 204, 0.1);
+        }
+
+        /* TAB CONTENT */
+        .tab-content {
+            flex: 1;
+            overflow: auto;
+            display: none;
+            padding: 16px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .output-content {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text-accent);
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        #output.empty {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        #output.error {
+            color: #ff6b6b;
+        }
+
+        /* VISUALIZATION PANELS */
+        .variables-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .var-item {
+            background: rgba(0, 122, 204, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .var-item:hover {
+            background: rgba(0, 122, 204, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.2);
+        }
+
+        .var-name {
+            display: block;
+            color: var(--text-accent);
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .var-value {
+            display: block;
+            color: #a5d6ff;
+            font-size: 12px;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .var-type {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ast-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ast-node {
+            padding: 12px;
+            background: rgba(79, 195, 247, 0.08);
+            border-left: 3px solid var(--primary);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        .ast-node:hover {
+            background: rgba(79, 195, 247, 0.15);
+            transform: translateX(4px);
+        }
+
+        .ast-keyword {
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ast-value {
+            color: var(--text-accent);
+        }
+
+        .ast-line-num {
+            color: var(--text-secondary);
+            margin-right: 8px;
+        }
+
+        /* STATUS BAR */
+        .status-bar {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            right: -320px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            box-shadow: -4px 0 16px rgba(0,0,0,0.4);
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            transition: all 0.2s;
+        }
+
+        .sidebar-close:hover {
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .example-item {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .example-item:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+            border-left-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
+        }
+
+        .example-item strong {
+            display: block;
+            color: var(--text-accent);
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .example-item small {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* SCROLLBARS */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .output-panel {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-title">
+                <span class="header-logo">⚡</span>
+                <span>ZARA IDE</span>
+            </div>
+            <div class="header-stats">
+                <span>✨ ZARA DILECTX</span>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="toolbar-group">
+                <button class="btn btn-primary" onclick="executeCode()" title="Execute code (Ctrl+Enter)">
+                    ▶ Run
+                </button>
+                <button class="btn btn-success" onclick="visualizeCode()" title="Analyze code">
+                    🔍 Visualize
+                </button>
+                <button class="btn btn-danger" onclick="clearOutput()" title="Clear output">
+                    🗑 Clear
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="toolbar-group">
+                <button class="btn" onclick="saveCode()" title="Save code (Ctrl+S)">
+                    💾 Save
+                </button>
+                <button class="btn" onclick="shareCode()" title="Share code">
+                    🔗 Share
+                </button>
+                <button class="btn" onclick="beautifyCode()" title="Format code">
+                    ✨ Format
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="toolbar-group">
+                <button class="btn" onclick="toggleExamples()" title="Load example programs">
+                    📚 Examples
+                </button>
+            </div>
+        </div>
+
+        <!-- WORKSPACE -->
+        <div class="workspace">
+            <!-- EDITOR PANEL -->
+            <div class="editor-panel">
+                <div class="panel-header">Code Editor</div>
+                <div class="editor-wrapper">
+                    <div class="line-numbers" id="lineNumbers"></div>
+                    <div class="editor-content">
+                        <textarea id="codeEditor" placeholder="Write ZARA code here...&#10;&#10;Example:&#10;set x = 10&#10;show x"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OUTPUT PANEL -->
+            <div class="output-panel">
+                <div class="panel-tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'output')">📤 Output</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'variables')">📊 Variables</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'ast')">🌳 AST</button>
+                </div>
+
+                <div id="output-tab" class="tab-content active">
+                    <div class="output-content">
+                        <div id="output" class="empty">Output will appear here...</div>
+                    </div>
+                </div>
+
+                <div id="variables-tab" class="tab-content">
+                    <div class="variables-panel" id="variablesPanel">
+                        <div style="color: var(--text-secondary); font-style: italic; grid-column: 1/-1;">Run code to see variables</div>
+                    </div>
+                </div>
+
+                <div id="ast-tab" class="tab-content">
+                    <div class="ast-panel" id="astPanel">
+                        <div style="color: var(--text-secondary); font-style: italic;">Run code to see AST</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS BAR -->
+        <div class="status-bar">
+            <div style="display: flex; gap: 20px;">
+                <span>📝 Lines: <strong id="lineCount">1</strong></span>
+                <span>📄 Chars: <strong id="charCount">0</strong></span>
+                <span id="executionTime"></span>
+            </div>
+            <div id="statusMessage">Ready</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="examplesSidebar">
+        <div class="sidebar-header">
+            📚 Example Programs
+            <button class="sidebar-close" onclick="toggleExamples()">✕</button>
+        </div>
+        <div class="sidebar-content" id="examplesContent"></div>
+    </div>
+
+    <script>
+        // ============ CONSTANTS ============
+        const codeEditor = document.getElementById('codeEditor');
+        const output = document.getElementById('output');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const statusMessage = document.getElementById('statusMessage');
+        const variablesPanel = document.getElementById('variablesPanel');
+        const astPanel = document.getElementById('astPanel');
+
+        let currentVariables = {};
+        let currentAST = [];
+        let executionTime = 0;
+
+        // ============ EXAMPLE PROGRAMS ============
+        const examplePrograms = [
+            {
+                name: "Arithmetic Operations",
+                description: "Basic math and variables",
+                code: "set x = 10\nset y = 20\nset sum = x + y\nshow sum"
+            },
+            {
+                name: "String Manipulation",
+                description: "String operations and display",
+                code: "set name = \"ZARA\"\nset greeting = \"Hello from \"\nshow greeting\nshow name"
+            },
+            {
+                name: "Conditional Logic",
+                description: "When statements (if/else)",
+                code: "set score = 85\nwhen score > 50:\n    show \"You passed!\"\nwhen score <= 50:\n    show \"Try again\""
+            },
+            {
+                name: "Loop Operation",
+                description: "Repeat using loop",
+                code: "set count = 1\nloop 5:\n    show count\n    set count = count + 1"
+            },
+            {
+                name: "Complex Program",
+                description: "Combined features",
+                code: "set total = 0\nset i = 1\nloop 5:\n    set total = total + i\n    set i = i + 1\nshow \"Sum: \"\nshow total"
+            }
+        ];
+
+        // ============ UI UTILITIES ============
+        function updateLineNumbers() {
+            try {
+                const lines = codeEditor.value.split('\n').length;
+                lineNumbers.textContent = Array(lines).fill(0).map((_, i) => i + 1).join('\n');
+                document.getElementById('lineCount').textContent = lines;
+                document.getElementById('charCount').textContent = codeEditor.value.length;
+            } catch (e) {
+                console.error('Line update error:', e);
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            try {
+                statusMessage.textContent = message;
+                setTimeout(() => {
+                    statusMessage.textContent = 'Ready';
+                }, 3000);
+            } catch (e) {
+                console.error('Status error:', e);
+            }
+        }
+
+        function switchTab(event, tabName) {
+            try {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                event.target.classList.add('active');
+                document.getElementById(tabName + '-tab').classList.add('active');
+            } catch (e) {
+                console.error('Tab switch error:', e);
+            }
+        }
+
+        function toggleExamples() {
+            try {
+                document.getElementById('examplesSidebar').classList.toggle('open');
+            } catch (e) {
+                console.error('Toggle error:', e);
+            }
+        }
+
+        // ============ CODE EDITOR EVENTS ============
+        codeEditor.addEventListener('input', updateLineNumbers);
+        codeEditor.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeEditor.selectionStart;
+                const end = codeEditor.selectionEnd;
+                codeEditor.value = codeEditor.value.substring(0, start) + '    ' + codeEditor.value.substring(end);
+                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+                updateLineNumbers();
+            }
+            if (e.ctrlKey && e.key === 'Enter') {
+                executeCode();
+            }
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveCode();
+            }
+        });
+
+        // ============ CORE FUNCTIONS ============
+        async function executeCode() {
+            try {
+                const code = codeEditor.value.trim();
+                if (!code) {
+                    output.textContent = '';
+                    output.className = 'empty';
+                    showStatus('❌ No code to execute');
+                    return;
+                }
+
+                const startTime = performance.now();
+                const payload = {
+                    code: code,
+                    sessionId: 'session-' + Date.now()
+                };
+
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    timeout: 30000
+                });
+
+                const result = await response.json();
+                const endTime = performance.now();
+                executionTime = (endTime - startTime).toFixed(2);
+
+                if (result.success) {
+                    output.textContent = result.output.join('\n') || '(no output)';
+                    output.className = '';
+                    document.getElementById('executionTime').textContent = `⏱️ ${executionTime}ms`;
+                    
+                    parseCodeForVisualization(code);
+                    
+                    showStatus(`✅ Executed in ${executionTime}ms`);
+                } else {
+                    output.textContent = result.error || 'Unknown error';
+                    output.className = 'error';
+                    showStatus('❌ Execution failed');
+                }
+            } catch (e) {
+                output.textContent = `Error: ${e.message}`;
+                output.className = 'error';
+                showStatus('❌ Error: ' + e.message);
+                console.error('Execution error:', e);
+            }
+        }
+
+        function parseCodeForVisualization(code) {
+            try {
+                const lines = code.split('\n');
+                currentVariables = {};
+                currentAST = [];
+
+                lines.forEach((line, index) => {
+                    const trimmed = line.trim();
+                    
+                    if (trimmed.toLowerCase().startsWith('set ')) {
+                        const match = trimmed.match(/set\s+(\w+)\s*=\s*(.*)/i);
+                        if (match) {
+                            const varName = match[1];
+                            const expr = match[2].trim();
+                            const type = inferType(expr);
+                            currentVariables[varName] = { value: expr, type: type };
+                            currentAST.push({ type: 'assignment', line: index + 1, var: varName, expr: expr });
+                        }
+                    }
+                    
+                    if (trimmed.toLowerCase().startsWith('when ')) {
+                        const match = trimmed.match(/when\s+(.*?):/i);
+                        if (match) {
+                            currentAST.push({ type: 'conditional', line: index + 1, condition: match[1] });
+                        }
+                    }
+                    
+                    if (trimmed.toLowerCase().startsWith('loop ')) {
+                        const match = trimmed.match(/loop\s+(\d+)/i);
+                        if (match) {
+                            currentAST.push({ type: 'loop', line: index + 1, count: match[1] });
+                        }
+                    }
+                    
+                    if (trimmed.toLowerCase().startsWith('show ')) {
+                        const expr = trimmed.substring(5).trim();
+                        currentAST.push({ type: 'output', line: index + 1, expr: expr });
+                    }
+                });
+
+                renderVariables();
+                renderAST();
+            } catch (e) {
+                console.error('Parsing error:', e);
+            }
+        }
+
+        function inferType(expr) {
+            expr = expr.trim();
+            if (expr.startsWith('"') && expr.endsWith('"')) return 'string';
+            if (!isNaN(expr)) return 'number';
+            return 'variable';
+        }
+
+        function renderVariables() {
+            try {
+                if (Object.keys(currentVariables).length === 0) {
+                    variablesPanel.innerHTML = '<div style="color: var(--text-secondary); font-style: italic; grid-column: 1/-1;">No variables yet</div>';
+                    return;
+                }
+
+                let html = '';
+                for (const [name, info] of Object.entries(currentVariables)) {
+                    html += `
+                        <div class="var-item">
+                            <span class="var-name">📦 ${name}</span>
+                            <span class="var-value">= ${escapeHtml(String(info.value))}</span>
+                            <span class="var-type">${info.type}</span>
+                        </div>
+                    `;
+                }
+                variablesPanel.innerHTML = html;
+            } catch (e) {
+                console.error('Render variables error:', e);
+            }
+        }
+
+        function renderAST() {
+            try {
+                if (currentAST.length === 0) {
+                    astPanel.innerHTML = '<div style="color: var(--text-secondary); font-style: italic;">No AST to display</div>';
+                    return;
+                }
+
+                let html = '';
+                currentAST.forEach(node => {
+                    if (node.type === 'assignment') {
+                        html += `<div class="ast-node"><span class="ast-line-num">#${node.line}</span><span class="ast-keyword">SET</span> <span class="ast-value">${node.var}</span> = ${escapeHtml(node.expr)}</div>`;
+                    } else if (node.type === 'conditional') {
+                        html += `<div class="ast-node"><span class="ast-line-num">#${node.line}</span><span class="ast-keyword">WHEN</span> <span class="ast-value">${escapeHtml(node.condition)}</span></div>`;
+                    } else if (node.type === 'loop') {
+                        html += `<div class="ast-node"><span class="ast-line-num">#${node.line}</span><span class="ast-keyword">LOOP</span> <span class="ast-value">${node.count}</span> times</div>`;
+                    } else if (node.type === 'output') {
+                        html += `<div class="ast-node"><span class="ast-line-num">#${node.line}</span><span class="ast-keyword">SHOW</span> <span class="ast-value">${escapeHtml(node.expr)}</span></div>`;
+                    }
+                });
+                astPanel.innerHTML = html;
+            } catch (e) {
+                console.error('Render AST error:', e);
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return String(text).replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // ============ UTILITY FUNCTIONS ============
+        function clearOutput() {
+            try {
+                output.textContent = '';
+                output.className = 'empty';
+                variablesPanel.innerHTML = '<div style="color: var(--text-secondary); font-style: italic; grid-column: 1/-1;">No variables</div>';
+                astPanel.innerHTML = '<div style="color: var(--text-secondary); font-style: italic;">No AST</div>';
+                document.getElementById('executionTime').textContent = '';
+                showStatus('✅ Output cleared');
+            } catch (e) {
+                console.error('Clear error:', e);
+            }
+        }
+
+        function visualizeCode() {
+            try {
+                const code = codeEditor.value.trim();
+                if (!code) {
+                    showStatus('❌ No code to visualize');
+                    return;
+                }
+                parseCodeForVisualization(code);
+                document.querySelectorAll('.tab-btn')[1].click();
+                showStatus('✅ Code analyzed');
+            } catch (e) {
+                showStatus('❌ Error visualizing code');
+                console.error('Visualization error:', e);
+            }
+        }
+
+        function saveCode() {
+            try {
+                const code = codeEditor.value;
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+                element.setAttribute('download', `zara-${Date.now()}.zara`);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                showStatus('✅ Code saved to file');
+            } catch (e) {
+                showStatus('❌ Error saving code');
+                console.error('Save error:', e);
+            }
+        }
+
+        function shareCode() {
+            try {
+                const code = encodeURIComponent(codeEditor.value);
+                const shareUrl = window.location.origin + '?code=' + code;
+                
+                if (shareUrl.length > 2000) {
+                    const base64Code = btoa(codeEditor.value);
+                    const base64Url = window.location.origin + '?code=' + base64Code;
+                    navigator.clipboard.writeText(base64Url).then(() => {
+                        showStatus('✅ Share URL copied (Base64)');
+                    }).catch(() => {
+                        fallbackCopy(base64Url);
+                    });
+                } else {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        showStatus('✅ Share URL copied');
+                    }).catch(() => {
+                        fallbackCopy(shareUrl);
+                    });
+                }
+            } catch (e) {
+                showStatus('❌ Error creating share URL');
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showStatus('✅ URL copied');
+        }
+
+        function beautifyCode() {
+            try {
+                let code = codeEditor.value;
+                let lines = code.split('\n');
+                let formatted = [];
+                let indentLevel = 0;
+
+                lines.forEach(line => {
+                    const trimmed = line.trim();
+                    if (!trimmed) {
+                        formatted.push('');
+                        return;
+                    }
+
+                    if (trimmed.toLowerCase().startsWith('when ') || trimmed.toLowerCase().startsWith('loop ')) {
+                        formatted.push('    '.repeat(indentLevel) + trimmed);
+                        if (trimmed.endsWith(':')) indentLevel++;
+                    } else if (trimmed === ':') {
+                        indentLevel++;
+                    } else {
+                        formatted.push('    '.repeat(indentLevel) + trimmed);
+                    }
+                });
+
+                codeEditor.value = formatted.join('\n');
+                updateLineNumbers();
+                showStatus('✅ Code formatted');
+            } catch (e) {
+                showStatus('❌ Error formatting code');
+            }
+        }
+
+        function loadExample(code) {
+            try {
+                codeEditor.value = code;
+                updateLineNumbers();
+                toggleExamples();
+                showStatus('✅ Example loaded');
+            } catch (e) {
+                showStatus('❌ Error loading example');
+                console.error('Load error:', e);
+            }
+        }
+
+        function loadExamples() {
+            try {
+                const examplesContent = document.getElementById('examplesContent');
+                let html = '';
+                
+                examplePrograms.forEach((ex, idx) => {
+                    // Use Base64 encoding to safely pass code with newlines
+                    const encodedCode = btoa(ex.code);
+                    html += `
+                        <div class="example-item" onclick="loadExampleFromData('${encodedCode}')">
+                            <strong>${(idx + 1)}. ${ex.name}</strong>
+                            <small>${ex.description}</small>
+                        </div>
+                    `;
+                });
+                
+                examplesContent.innerHTML = html;
+            } catch (e) {
+                console.error('Load examples error:', e);
+                document.getElementById('examplesContent').innerHTML = '<div style="color: red;">Error loading examples</div>';
+            }
+        }
+
+        function loadExampleFromData(encodedCode) {
+            // Decode Base64 to get the original code with proper newlines
+            try {
+                const code = atob(encodedCode);
+                loadExample(code);
+            } catch (e) {
+                console.error('Decoding error:', e);
+                showStatus('❌ Error decoding example code');
+            }
+        }
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                loadExamples();
+                updateLineNumbers();
+
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('code')) {
+                    try {
+                        let code = params.get('code');
+                        try {
+                            code = atob(code);
+                        } catch (e) {
+                            code = decodeURIComponent(code);
+                        }
+                        
+                        if (code && code.length > 0) {
+                            codeEditor.value = code;
+                            updateLineNumbers();
+                            showStatus('✅ Shared code loaded');
+                        }
+                    } catch (e) {
+                        console.error('Error loading shared code:', e);
+                    }
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.getElementById('examplesSidebar').classList.remove('open');
+                    }
+                });
+
+            } catch (e) {
+                console.error('Initialization error:', e);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZARA Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            border-left: 4px solid #667eea;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .api-endpoint {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .api-endpoint strong {
+            color: #667eea;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 ZARA Language Documentation</h1>
+        <p>Complete reference for the ZARA programming language and its web interpreter.</p>
+
+        <h2>Language Overview</h2>
+        <p>ZARA is a simple, educational programming language designed to teach fundamental programming concepts. It supports variables, arithmetic operations, string manipulation, conditionals, and loops.</p>
+
+        <h2>Syntax Reference</h2>
+
+        <h3>1. Variables</h3>
+        <p>Variables are declared using the <code>set</code> keyword.</p>
+        <pre>set variable_name = value
+set x = 10
+set name = "Hello"
+set result = 3.14</pre>
+
+        <h3>2. Output</h3>
+        <p>Use the <code>show</code> keyword to display values.</p>
+        <pre>show 42
+show x + 5
+show "Hello World"
+show name</pre>
+
+        <h3>3. Arithmetic Operations</h3>
+        <p>ZARA supports basic arithmetic operations:</p>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>+</td>
+                <td>Addition</td>
+                <td>set result = 5 + 3</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td>Subtraction</td>
+                <td>set result = 10 - 2</td>
+            </tr>
+            <tr>
+                <td>*</td>
+                <td>Multiplication</td>
+                <td>set result = 4 * 6</td>
+            </tr>
+            <tr>
+                <td>/</td>
+                <td>Division</td>
+                <td>set result = 20 / 4</td>
+            </tr>
+        </table>
+
+        <h3>4. String Operations</h3>
+        <p>Strings are enclosed in double quotes. You can concatenate them with the <code>+</code> operator.</p>
+        <pre>set msg = "Hello"
+set name = "World"
+show msg + " " + name</pre>
+
+        <h3>5. Comparison Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>==</td>
+                <td>Equal to</td>
+                <td>when x == 5: show "Equal"</td>
+            </tr>
+            <tr>
+                <td>&gt;</td>
+                <td>Greater than</td>
+                <td>when x > 5: show "Greater"</td>
+            </tr>
+            <tr>
+                <td>&lt;</td>
+                <td>Less than</td>
+                <td>when x < 5: show "Less"</td>
+            </tr>
+        </table>
+
+        <h3>6. Conditionals</h3>
+        <p>Execute code conditionally using the <code>when</code> keyword.</p>
+        <pre>when condition: statement
+
+Example:
+set age = 20
+when age >= 18: show "You are an adult"</pre>
+
+        <h3>7. Loops</h3>
+        <p>Repeat code using the <code>loop</code> keyword.</p>
+        <pre>loop count: statements
+
+Example:
+loop 5: show "ZARA"</pre>
+
+        <h2>API Endpoints</h2>
+
+        <div class="api-endpoint">
+            <strong>POST /api/execute</strong><br>
+            Execute ZARA code and get output.
+            <pre>{
+  "code": "set x = 10\nshow x",
+  "sessionId": "session-123"
+}</pre>
+            Response:
+            <pre>{
+  "success": true,
+  "output": ["10"],
+  "executionTimeMs": 45,
+  "executionId": "exec-456"
+}</pre>
+        </div>
+
+        <div class="api-endpoint">
+            <strong>GET /api/history/{sessionId}</strong><br>
+            Get execution history for a session.
+        </div>
+
+        <div class="api-endpoint">
+            <strong>GET /api/execution/{executionId}</strong><br>
+            Get details of a specific execution.
+        </div>
+
+        <div class="api-endpoint">
+            <strong>GET /api/health</strong><br>
+            Check service health status.
+        </div>
+
+        <div class="api-endpoint">
+            <strong>DELETE /api/history/{sessionId}</strong><br>
+            Clear execution history for a session.
+        </div>
+
+        <h2>Example Programs</h2>
+
+        <h3>Arithmetic</h3>
+        <pre>set a = 10
+set b = 5
+set sum = a + b
+set product = a * b
+show "Sum: " + sum
+show "Product: " + product</pre>
+
+        <h3>Conditional Logic</h3>
+        <pre>set score = 85
+when score >= 90: show "A Grade"
+when score >= 80: show "B Grade"
+when score >= 70: show "C Grade"</pre>
+
+        <h3>Loops</h3>
+        <pre>loop 3: show "Hello!"
+set counter = 1
+loop 5: show counter</pre>
+
+        <h3>String Operations</h3>
+        <pre>set firstName = "John"
+set lastName = "Doe"
+set fullName = firstName + " " + lastName
+show fullName</pre>
+
+        <h2>Quick Tips</h2>
+        <ul>
+            <li>Variable names are case-sensitive</li>
+            <li>Use double quotes for strings</li>
+            <li>Numbers can be integers or decimals</li>
+            <li>The <code>+</code> operator works for both arithmetic and string concatenation</li>
+            <li>All numbers are treated as floating-point internally</li>
+        </ul>
+
+        <h2>Troubleshooting</h2>
+        <p><strong>Syntax Error:</strong> Check your spelling and ensure proper syntax according to the language rules.</p>
+        <p><strong>Variable not defined:</strong> Make sure you've declared the variable with <code>set</code> before using it.</p>
+        <p><strong>Type mismatch:</strong> Ensure you're using appropriate operations for your data types.</p>
+
+        <a href="/" class="back-link">← Back to Interpreter</a>
+    </div>
+</body>
+</html>

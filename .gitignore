@@ -1,0 +1,137 @@
+# ============ COMPILED & BUILD ARTIFACTS ============
+*.class
+*.classpath
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.ear.original
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-check-report.html
+.m2/
+
+# Gradle
+build/
+gradle/
+.gradle/
+*.gradle
+
+# ============ IDE & EDITOR FILES ============
+.vscode/
+.vscode_extensions/
+.idea/
+.project
+.classpath
+.c9/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+*.iws
+*.ipr
+out/
+
+# ============ OS & SYSTEM FILES ============
+.sixth
+.DS_Store
+Thumbs.db
+desktop.ini
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*.lnk
+
+# ============ ENVIRONMENT & CONFIGURATION ============
+.env
+.env.local
+.env.*.local
+*.properties.local
+.env.production
+.env.development
+
+# ============ LOG FILES ============
+*.log
+logs/
+/tmp/
+*.out
+
+# ============ APPLICATION RUNTIME ============
+application.log
+spring.log
+*.pid
+*.log.*
+
+# ============ TEMPORARY & BACKUP FILES ============
+.tmp/
+*.tmp
+*.bak
+*~
+*.swp
+*.swo
+*#
+.#*
+*.orig
+
+# ============ NODE (if using Spring Boot + Node tooling) ============
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ============ DATABASE & DATA ============
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+data/
+
+# ============ COVERAGE & TESTING ============
+.coverage
+.pytest_cache
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+site/
+
+# ============ MISC GENERATED FILES ============
+*.class.bak
+*.ctxt
+.nbattrs
+.nb-gradle/
+nb-configuration.xml
+.sts4-cache/
+.factorypath
+
+# ============ UNWANTED MARKDOWN FILES (Debug/Analysis/Temp) ============
+# These are temporary documentation files created during development
+*ANALYSIS.md
+*SUMMARY.md
+*GUIDE.md
+*COMPLETE.md
+*INVENTORY.md
+DEBUG*.md
+WEB_DEPLOYMENT*.md
+EXAMPLES*.md
+SYNTAX_ERROR*.md
+QUICK_START*.md
+*TROUBLESHOOTING.md
+FIXED*.md
+*_FIX_*.md
+*_FIX_REPORT*.md
+NETWORK_*.md

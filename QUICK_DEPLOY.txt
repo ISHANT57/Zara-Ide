@@ -1,0 +1,60 @@
+# 🚀 RENDER DEPLOYMENT - QUICK REFERENCE
+
+## Files You'll Need (All Ready ✅)
+- **Procfile** - Render build/start commands
+- **system.properties** - Java 17 spec
+- **render.yaml** - Infrastructure config
+- **.env.example** - Environment variables
+- **application.properties** - Updated with `${PORT:8080}`
+
+## 1-Minute Setup
+
+```bash
+# 1. Commit changes
+git add .
+git commit -m "Deploy to Render"
+git push origin main
+
+# 2. Go to dashboard (copy-paste this URL)
+https://dashboard.render.com/new/web
+
+# 3. Configure:
+Name: zara-interpreter
+Build: cd springboot && mvn clean package -DskipTests -q
+Start: cd springboot && java -Xmx300m -Xms75m -jar target/zara-interpreter-1.0.0.jar
+
+# 4. Click "Create Web Service"
+# → Done! Deploys in 3-5 minutes
+```
+
+## Test After Deployment
+```bash
+# Replace YOUR-SERVICE with your actual service name
+curl https://YOUR-SERVICE.onrender.com/api/health
+# Should see: {"status":"up"}
+```
+
+## Important Limits (Free Tier)
+- Memory: 512MB total (Java uses ~300MB)
+- Build: 10 minute timeout
+- Sleeps after 15 min inactivity (wakes on first request ~30sec)
+- Disk: 1GB ephemeral
+
+## Upgrade When Ready
+In Render Dashboard → Service → Settings → Change Plan
+- Get continuous uptime
+- More CPU/memory
+- Only $7/month
+
+## Troubleshoot
+1. Check logs: Dashboard → Logs
+2. Health endpoint: `/api/health`
+3. Most issues: Check application.properties has `${PORT:8080}`
+
+## Need Help?
+- Read: RENDER_DEPLOY.md (full guide)
+- Read: DEPLOYMENT_READY.md (checklist)
+- Render Docs: https://render.com/docs/deploy-java
+
+---
+Your ZARA Interpreter is **PRODUCTION READY!** 🎉

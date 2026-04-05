@@ -10,7 +10,7 @@
 
 *Create. Interpret. Execute. — Your journey into language design starts here.*
 
-[📖 Syntax Guide](#-zara-syntax) • [🚀 Quick Start](#-quick-start) • [📚 Examples](#-examples) • [🏗️ Architecture](#-project-architecture)
+[🌐 Web IDE](#-web-ide-with-code-visualization) • [📖 Syntax Guide](#-zara-syntax) • [🚀 Quick Start](#-quick-start) • [📚 Examples](#-examples) • [🏗️ Architecture](#-project-architecture)
 
 </div>
 
@@ -76,6 +76,126 @@ When you're done, a user can write a `.zara` file, run your program, and see rea
 
 >>> Done!
 ```
+
+---
+
+## 🌐 Web IDE with Code Visualization
+
+### Modern Interactive Web Interface
+
+ZARA now includes a **professional web-based IDE** built with Spring Boot! Write code in your browser with real-time visualization.
+
+**Access the IDE:**
+```bash
+# Build and run the Spring Boot application
+cd springboot
+mvn clean package -DskipTests
+java -jar target/zara-interpreter-1.0.0.jar
+
+# Open in browser
+http://localhost:8080
+```
+
+### ✨ Features
+
+#### 📝 Code Editor
+- Syntax highlighting
+- Line numbers
+- Examples sidebar
+- Real-time code execution
+
+#### 📊 Code Visualization (NEW!)
+Three powerful analysis tabs:
+
+1. **📤 Output Tab** - See program results
+2. **📊 Variables Tab** - Track all variables and their values
+3. **🌳 AST Tab** - Visualize code structure
+
+#### 🎮 Interactive Elements
+- **Run** - Execute your code and see output
+- **Visualize** - Analyze code without running it
+- **Examples** - Load 5 pre-built sample programs
+- **Clear** - Reset editor and output
+
+### How to Use
+
+```
+1. Open http://localhost:8080
+2. Write ZARA code or load an example
+3. Click "Run" button
+4. Check Output tab for results
+5. Check Variables tab to see all variables
+6. Check AST tab to see code structure
+```
+
+### Example Usage
+
+**Code:**
+```zara
+set x = 10
+set y = 20
+set sum = x + y
+show sum
+```
+
+**Output Tab shows:**
+```
+30
+```
+
+**Variables Tab shows:**
+```
+x = 10 (number)
+y = 20 (number)
+sum = x + y (variable)
+```
+
+**AST Tab shows:**
+```
+Line 1: set x = 10
+Line 2: set y = 20
+Line 3: set sum = x + y
+Line 4: show sum
+```
+
+### REST API
+
+The web IDE uses a powerful REST API. Use it for:
+- Headless code execution
+- Integration with other tools
+- Batch processing
+
+**Endpoints:**
+
+**Execute Code:**
+```bash
+curl -X POST http://localhost:8080/api/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "set x = 10\nshow x",
+    "sessionId": "my-session"
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "output": ["10"],
+  "sessionId": "my-session"
+}
+```
+
+**Get History:**
+```bash
+curl http://localhost:8080/api/history/my-session
+```
+
+### 📚 Documentation
+
+- **[VISUALIZATION_GUIDE.md](VISUALIZATION_GUIDE.md)** - Complete guide to visualization features
+- **[EXAMPLES_GUIDE.md](EXAMPLES_GUIDE.md)** - Example programs and usage
+- **[NETWORK_FIX_GUIDE.md](NETWORK_FIX_GUIDE.md)** - Troubleshooting network issues
 
 ---
 

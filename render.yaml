@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: zara-interpreter
+    runtime: jvm
+    plan: free
+    buildCommand: cd springboot && mvn clean package -DskipTests -q
+    startCommand: cd springboot && java -Xmx300m -Xms75m -jar target/zara-interpreter-1.0.0.jar
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: JAVA_OPTS
+        value: "-Xmx300m -Xms75m"
+    healthCheckPath: /api/health
+    preDeployCommand: cd springboot && mvn clean package -DskipTests -q

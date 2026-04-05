@@ -1,0 +1,16 @@
+target/
+.git
+.gitignore
+.idea
+*.iml
+.vscode
+node_modules
+npm-debug.log
+.DS_Store
+*.log
+.gradle
+build/
+*.class
+.mvn
+mvnw
+mvnw.cmd

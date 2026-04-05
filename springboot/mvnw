@@ -1,0 +1,3 @@
+# Maven Wrapper Script for Linux/macOS
+#!/bin/sh
+mvn "$@"
